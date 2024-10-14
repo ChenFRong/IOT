@@ -1,0 +1,361 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for managing sensor data and device control",
+        "version": "1.0.0",
+        "title": "Sensor Data API"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "definitions": {
+        "SensorData": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "ID của cảm biến"
+                },
+                "temperature": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Nhiệt độ do cảm biến đo được"
+                },
+                "humidity": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Độ ẩm do cảm biến đo được"
+                },
+                "light": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Cường độ ánh sáng do cảm biến đo được"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Thời gian ghi nhận dữ liệu"
+                }
+            },
+            "required": ["id", "temperature", "humidity", "light", "timestamp"]
+        },
+        "DeviceStatus": {
+            "type": "object",
+            "properties": {
+                "device": {
+                    "type": "string",
+                    "description": "Tên thiết bị"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Trạng thái thiết bị (on/off)"
+                },
+                "last_update": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Thời gian cập nhật trạng thái"
+                }
+            },
+            "required": ["device", "status"]
+        },
+        "ActionHistory": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "ID của hành động"
+                },
+                "device": {
+                    "type": "string",
+                    "description": "Tên thiết bị thực hiện hành động"
+                },
+                "action": {
+                    "type": "string",
+                    "description": "Hành động được thực hiện (on/off)"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Thời gian thực hiện hành động"
+                }
+            },
+            "required": ["id", "device", "action", "timestamp"]
+        }
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Trang chủ",
+                "responses": {
+                    "200": {
+                        "description": "Trả về trang chủ với dữ liệu cảm biến mới nhất."
+                    }
+                }
+            }
+        },
+        "/sensor_data": {
+            "get": {
+                "summary": "Lấy dữ liệu cảm biến mới nhất",
+                "responses": {
+                    "200": {
+                        "description": "Dữ liệu cảm biến thành công.",
+                        "schema": {
+                            "$ref": "#/definitions/SensorData"
+                        }
+                    }
+                }
+            }
+        },
+        "/ten_sensor_data": {
+            "get": {
+                "summary": "Lấy 10 dữ liệu cảm biến mới nhất",
+                "responses": {
+                    "200": {
+                        "description": "10 dữ liệu cảm biến thành công.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SensorData"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sensor_data_all": {
+            "get": {
+                "summary": "Lấy tất cả dữ liệu cảm biến",
+                "responses": {
+                    "200": {
+                        "description": "Tất cả dữ liệu cảm biến thành công.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SensorData"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sensor_data_view": {
+            "get": {
+                "summary": "Hiển thị dữ liệu cảm biến",
+                "responses": {
+                    "200": {
+                        "description": "Trả về trang dữ liệu cảm biến."
+                    }
+                }
+            }
+        },
+        "/search_sensordata": {
+            "get": {
+                "summary": "Tìm kiếm dữ liệu cảm biến",
+                "parameters": [
+                    {
+                        "name": "queries",
+                        "in": "query",
+                        "required": true,
+                        "description": "Giá trị tìm kiếm từ người dùng",
+                        "type": "string"
+                    },
+                    {
+                        "name": "field",
+                        "in": "query",
+                        "required": false,
+                        "description": "Trường tìm kiếm",
+                        "type": "string",
+                        "default": "all"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dữ liệu cảm biến phù hợp với tìm kiếm."
+                    }
+                }
+            }
+        },
+        "/toggle_device/{device}/{action}": {
+            "post": {
+                "summary": "Control a device via MQTT",
+                "description": "This endpoint allows you to turn on or off a specific device using MQTT.",
+                "parameters": [
+                {
+                    "name": "device",
+                    "in": "path",
+                    "required": true,
+                    "description": "The name of the device to control (light, fan, air_conditioner).",
+                    "type": "string"
+                },
+                {
+                    "name": "action",
+                    "in": "path",
+                    "required": true,
+                    "description": "The action to perform on the device (on or off).",
+                    "type": "string"
+                }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Successful operation.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                        "type": "string",
+                        "example": "success"
+                        },
+                        "device": {
+                        "type": "string",
+                        "example": "light"
+                        },
+                        "action": {
+                        "type": "string",
+                        "example": "on"
+                        }
+                    }
+                    }
+                },
+                "400": {
+                    "description": "The specified device is not supported.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                        "type": "string",
+                        "example": "error"
+                        },
+                        "message": {
+                        "type": "string",
+                        "example": "Device not supported"
+                        }
+                    }
+                    }
+                },
+                "500": {
+                    "description": "An internal server error occurred.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "status": {
+                        "type": "string",
+                        "example": "error"
+                        },
+                        "message": {
+                        "type": "string",
+                        "example": "Some error message"
+                        }
+                    }
+                    }
+                }
+                }
+            }
+         },
+        "/api/device_status/{device_name}": {
+            "get": {
+                "summary": "Get the status of a device",
+                "parameters": [
+                {
+                    "name": "device_name",
+                    "in": "path",
+                    "required": true,
+                    "description": "The name of the device to check its status.",
+                    "type": "string"
+                }
+                ],
+                "responses": {
+                "200": {
+                    "description": "Successful response with device status.",
+                    "schema": {
+                    "type": "object",
+                    "properties": {
+                        "device": {
+                        "type": "string"
+                        },
+                        "status": {
+                        "type": "string"
+                        },
+                        "last_update": {
+                        "type": "string",
+                        "format": "date-time"
+                        }
+                    }
+                    }
+                },
+                "404": {
+                    "description": "Device not found.",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                            "type": "string",
+                            "example": "error"
+                            },
+                            "message": {
+                            "type": "string",
+                            "example": "Device not found"
+                            }
+                        }
+                    }
+                }
+                
+            }
+        },
+        "/actionhistory": {
+            "get": {
+                "summary": "Hiển thị lịch sử hành động",
+                "responses": {
+                    "200": {
+                        "description": "Trả về lịch sử hành động.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ActionHistory"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/search_actionhistory": {
+            "get": {
+                "summary": "Tìm kiếm lịch sử hành động",
+                "parameters": [
+                    {
+                        "name": "queries",
+                        "in": "query",
+                        "required": true,
+                        "description": "Giá trị tìm kiếm",
+                        "type": "string"
+                    },
+                    {
+                        "name": "field",
+                        "in": "query",
+                        "required": false,
+                        "description": "Trường tìm kiếm",
+                        "type": "string",
+                        "default": "all"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lịch sử hành động phù hợp với tìm kiếm."
+                    }
+                }
+            }
+        },
+        "/Profile": {
+            "get": {
+                "summary": "Hiển thị thông tin cá nhân",
+                "responses": {
+                    "200": {
+                        "description": "Trả về thông tin cá nhân."
+                    }
+                }
+            }
+        }
+    }
+}
+}

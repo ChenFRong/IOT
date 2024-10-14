@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IOT</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="static/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+    <link rel="stylesheet" href="static/assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="static/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="static/assets/vendors/font-awesome/css/font-awesome.min.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="static/assets/vendors/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="static/assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="static/assets/images/favicon.png" />
+    <!--Slider vòng cung-->
+    <style> 
+      .arc-container {
+        position: relative;
+        text-align: center;
+        margin-top: -20px; /* Adjust to bring the text closer to the arc */
+      }
+      
+      .arc-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.5rem;
+        color: white;
+      }
+      
+      canvas {
+        display: block;
+        margin: 0 auto; /* Center the canvas */
+      }
+      
+      .bg-gradient-yellow {
+        background: linear-gradient(to right, #ffdb58, #ffeb3b) !important;
+        color: white;
+      }
+      
+      .card-body h4 {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      /* Chỉnh thiết bị */
+      .heading_container {
+        text-align: center; /* Căn giữa chữ tiêu đề */
+        margin-left: 20px; /* Xóa margin mặc định */
+        padding: 15px 0; /* Thêm padding trên và dưới để tạo không gian cho tiêu đề */
+        }
+        .box {
+            justify-content: center; /* Căn giữa nội dung */
+        }
+          
+        .img-box h5 {
+            margin-top: 5px; /* Khoảng cách giữa icon và tên thiết bị */
+        }
+          
+        
+          
+        .device-container {
+          padding: 10px; /* Thêm padding cho ô trắng */
+      }
+        
+      .img-box {
+        margin-right: 20px; /* Khoảng cách giữa icon và nút ON/OFF */
+        display: flex; /* Căn giữa icon và tên thiết bị */
+        flex-direction: column; /* Sắp xếp theo chiều dọc */
+        align-items: center; /* Căn giữa theo chiều ngang */
+        }
+        .light .btn-container {
+          margin-left: 30px; /* Khoảng cách cho thiết bị Đèn */
+      }
+      
+      .fan .btn-container {
+          margin-left: 40px; /* Khoảng cách cho thiết bị Quạt */
+  
+      }
+      
+      .air-conditioner .btn-container {
+          margin-left: 2px; /* Khoảng cách cho thiết bị Điều Hòa */
+          margin-right: 27px; 
+      }
+      
+      .btn-container {
+          display: flex; /* Sử dụng flexbox để căn giữa */
+          align-items: center; /* Căn giữa các nút trong trục ngang */
+          gap: 1px; /* Khoảng cách giữa nút ON và OFF */
+      }
+      
+      /* Định dạng nút */
+      .btn-container button {
+          padding: 5px 10px; /* Padding cho nút */
+          border: none; /* Xóa border */
+          border-radius: 2px; /* Bo góc cho nút */
+          cursor: pointer; /* Thay đổi con trỏ khi hover */
+      }
+      
+      .on {
+          background-color: #4CAF50; /* Màu xanh cho nút ON */
+          color: white; /* Màu chữ trắng */
+      }
+      
+      .off {
+          background-color: #f44336; /* Màu đỏ cho nút OFF */
+          color: white; /* Màu chữ trắng */
+      }
+      
+        .btn-container button:hover {
+            opacity: 0.8; /* Thay đổi độ trong suốt khi hover */
+        }
+        .device-container {
+          background-color: white; /* Màu nền trắng */
+          border: 1px solid #dee2e6; /* Viền nhẹ để phân biệt */
+          margin-left: 0; /* Bỏ khoảng cách bên trái của ô biểu đồ */
+      }
+      
+      /* Hiệu ứng khi bật đèn */
+      .light-on {
+        color: orange; /* Đổi màu đèn thành vàng khi bật */
+      }
+
+      /* Hiệu ứng quạt quay */
+      .fan-on {
+        animation: spin 2s linear infinite; /* Quay tròn liên tục */
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* Hiệu ứng điều hòa đổi màu xanh */
+      .snowflake-on {
+        color: blue; /* Đổi màu hoa tuyết thành xanh khi bật */
+      } 
+        /* Màu xám cho nút không được kích hoạt */
+      button.disabled {
+        color: white;
+        pointer-events: none; /* Không cho phép click vào nút đã bị vô hiệu hóa */
+      }
+
+      .button-on {
+        background-color: green; /* Màu xanh khi bật ON */
+        color: white;
+    }
+    
+    .button-off {
+        background-color: gray; /* Màu xám khi tắt */
+        color: white;
+    }
+    
+    .button-active-off {
+        background-color: red; /* Màu đỏ khi bật OFF */
+        color: white;
+    }
+    
+    
+
+    
+      .card-title {
+          margin-bottom: 20px; /* Khoảng cách tiêu đề đến biểu đồ */
+      }
+    
+      .device-container {
+        height: 100%; /* Đảm bảo rằng chiều cao của ô này không thay đổi */
+        display: flex;
+        flex-direction: column;
+        align-items: stretch; /* Đảm bảo rằng các phần tử con không thay đổi kích thước */
+        
+    }
+    
+    #sensor-chart {
+        width: 100% !important; /* Đảm bảo canvas có chiều rộng đầy đủ */
+        height: calc(100%-40px) !important; /* Đảm bảo canvas có chiều cao đầy đủ */
+        display: block; /* Để loại bỏ khoảng trống dưới canvas */
+    }
+    .chart-container {
+      position: relative;
+      width: 100%; /* Đảm bảo biểu đồ phù hợp với kích thước container */
+      height: 100%;
+  }
+  
+  canvas {
+      width: 100% !important; /* Biểu đồ giãn rộng 100% theo chiều rộng của container */
+      height: auto !important; /* Tự động điều chỉnh chiều cao */
+  }
+</style>
+    
+    
+  </head> 
+  <body>
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <!--logo-->
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+          <a class="navbar-brand brand-logo" href="/"><img src="static/assets/images/logo.svg" alt="logo" /></a>
+          <a class="navbar-brand brand-logo-mini" href="/"><img src="static/assets/images/logo-mini.svg" alt="logo" /></a>
+        </div>
+        <!--Nút menu-->
+        <div class="navbar-menu-wrapper d-flex align-items-stretch">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+            <div id="current-time" class="ml-3" style="color: black; padding-left:10px; position: fixed; right: 10px; top: 10px;"></div> <!-- Phần tử hiển thị thời gian -->
+          </button>
+          
+        </div>
+      </nav>
+      <!-- menu -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sensor_data_view">
+                <span class="menu-title">Datasensor</span>
+                <i class="mdi mdi-table-large menu-icon"></i>
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/actionhistory">
+                <span class="menu-title">Actionhistory</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/Profile">
+                <span class="menu-title">Profile</span>
+                <i class="mdi mdi-contacts menu-icon"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
+              </h3>
+              <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item active" aria-current="page">
+                    <span></span>Overview <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+                  </li>
+                </ul>
+              </nav>
+            </div> 
+
+      
+
+            <!--Đọc dữ liệu cảm biến-->
+            <div class="row">
+              <!-- Temperature Card -->
+              <div class="col-md-4 stretch-card grid-margin">
+                <div id="temperature-card" class="card bg-gradient-danger card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Temperature <i class="mdi mdi-thermometer mdi-24px float-end" color="red"></i></h4>
+                    <canvas id="temperature-canvas" width="150" height="75"></canvas>
+                    <div class="arc-container">
+                      <div class="arc-value" id="temperature-value">{{ sensor_data['temperature'] }} °C
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <!-- Humidity Card -->
+              <div class="col-md-4 stretch-card grid-margin">
+                <div id="humidity-card" class="card bg-gradient-info card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Humidity <i class="mdi mdi-water-percent mdi-24px float-end"></i></h4>
+                    <canvas id="humidity-canvas" width="150" height="75"></canvas>
+                    <div class="arc-container">
+                      <div class="arc-value" id="humidity-value"> {{ sensor_data['humidity'] }} %
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <!-- Light Card -->
+              <div class="col-md-4 stretch-card grid-margin">
+                <div id="light-card" class="card bg-gradient-yellow card-img-holder text-white">
+                  <div class="card-body">
+                    <img src="static/assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
+                    <h4 class="font-weight-normal mb-3">Light <i class="mdi mdi-weather-sunny mdi-24px float-end"></i></h4>
+                    <canvas id="light-canvas" width="150" height="75"></canvas>
+                    <div class="arc-container">
+                      <div class="arc-value" id="light-value">{{ sensor_data['light'] }} lx
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Biểu đồ và các thiết bị -->
+            <div class="row d-flex align-items-stretch"  style="gap:10px;">
+              <!-- Biểu đồ trong ô trắng rộng hơn -->
+              <!-- Ô chứa biểu đồ -->
+              <div class="col-md-8 grid-margin stretch-card" >
+                <div class="device-container bg-white p-4 rounded shadow h-100">
+                    <h2 class="heading_container text-center" style="font-size: 20px;">Temperature, Humidity, and Light Chart</h2>
+                    <div class="chart-container">
+                      <canvas id="sensor-chart" width="400" height="200"></canvas>
+                  </div>
+                </div>
+              </div>
+
+
+          
+              <!-- Ô trắng cho các thiết bị -->
+              <div class="col-md-4 grid-margin stretch-card" style="height: 400px; width:80px ;">
+                 <div class="device-container bg-white p-4 rounded shadow">
+                      <h2 class="heading_container text-center" style="font-size: 20px;">Our Devices</h2>
+                      <div class="row">
+                          <div class="col-md-8 mx-auto">
+                              <!-- Thiết bị Đèn -->
+                              <div class="box light mb-5 d-flex align-items-center">
+                                  <div class="img-box light me-3 d-flex flex-column align-items-center">
+                                      <i class="bi bi-lightbulb" style="font-size:30px;"></i>
+                                      <h5>Light</h5>
+                                  </div>
+                                  <div class="btn-container d-flex">
+                                      <button class="on" onclick="toggleLight(this)">ON</button>
+                                      <button class="off disabled" onclick="toggleLight(this)">OFF</button>
+                                  </div>
+                              </div>
+          
+                              <!-- Thiết bị Quạt -->
+                              <div class="box fan mb-5 d-flex align-items-center">
+                                  <div class="img-box fan me-3 d-flex flex-column align-items-center">
+                                      <i class="bi bi-fan" style="font-size: 30px;"></i>
+                                      <h5>Fan</h5>
+                                  </div>
+                                  <div class="btn-container d-flex">
+                                      <button class="on" onclick="toggleFan(this)">ON</button>
+                                      <button class="off disabled" onclick="toggleFan(this)">OFF</button>
+                                  </div>
+                              </div>
+          
+                              <!-- Thiết bị Điều Hòa -->
+                              <div class="box air-conditioner d-flex align-items-center">
+                                  <div class="img-box air-conditioner me-3 d-flex flex-column align-items-center">
+                                    <i class="bi bi-snow2" style="font-size: 30px;"></i>
+                                      <h5>Conditioner</h5>
+                                  </div>
+                                  <div class="btn-container d-flex">
+                                      <button class="on" onclick="toggleAC(this)">ON</button>
+                                      <button class="off disabled" onclick="toggleAC(this)">OFF</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+           </div>
+          
+          <div class="row">
+            <div class="col-md-7 grid-margin stretch-card">
+              <div class="card">
+              </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
+              <div class="card">   
+              </div>
+            </div>
+          </div>
+        </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2024<a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    
+
+    <script src="static/assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="static/assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="static/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="static/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="static/assets/js/off-canvas.js"></script>
+    <script src="static/assets/js/misc.js"></script>
+    <script src="static/assets/js/settings.js"></script>
+    <script src="static/assets/js/todolist.js"></script>
+    <script src="static/assets/js/jquery.cookie.js"></script>
+    <!--Biểu đồ-->
+    <script src="static/assets/js/chart.js"></script>
+    <script src="static/assets/js/time.js"></script
+    <script src="static/assets/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+     <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!--Dể cập nhật sữ liệu liên tục-->
+    <!--<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>--> <!--Dể bật tắt thiết bị -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  
+
+    
+  
+    <script>
+        // Cập nhật dữ liệu liên tục
+         // Cập nhật dữ liệu liên tục
+        function fetchSensorData() {
+          $.ajax({
+              url: '/sensor_data',
+              method: 'GET',
+              success: function(data) {
+                  if (data.error) {
+                      console.error(data.error);
+                  } else {
+                      // Cập nhật giá trị hiển thị
+                      $('#temperature-value').text(data.temperature + ' °C');
+                      $('#humidity-value').text(data.humidity + ' %');
+                      $('#light-value').text(data.light + ' lx');
+      
+                      // Vẽ nửa đường tròn với gradient sáng và nổi bật hơn
+                      drawHalfCircle(ctxTemperature, Math.min(1, data.temperature / 100),"#ff9999", "#ff3333"); // Nhiệt độ: Đỏ gradient
+                      drawHalfCircle(ctxHumidity, Math.min(1, data.humidity / 100), "#3FD5E9", "#1446F7"); // Độ ẩm: Xanh gradient
+                      drawHalfCircle(ctxLight, Math.min(1, (data.light - 300) / (2500 - 300)), "#F2CD5C", "#F27405"); // Ánh sáng: Vàng/Da cam gradient
+                  }
+              },
+              error: function(xhr, status, error) {
+                  console.error("Error fetching data: " + error);
+              }
+          });
+      }
+  
+      // Gọi hàm fetchSensorData mỗi 5 giây
+      setInterval(fetchSensorData, 5000);
+      
+      // Lấy các canvas và context
+      const canvasTemperature = document.getElementById('temperature-canvas');
+      const ctxTemperature = canvasTemperature.getContext('2d');
+      
+      const canvasHumidity = document.getElementById('humidity-canvas');
+      const ctxHumidity = canvasHumidity.getContext('2d');
+      
+      const canvasLight = document.getElementById('light-canvas');
+      const ctxLight = canvasLight.getContext('2d');
+      
+      // Hàm để vẽ nửa đường tròn với hiệu ứng gradient nổi bật
+      function drawHalfCircle(ctx, percentage, colorStart, colorEnd) {
+          ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Xóa canvas
+          ctx.beginPath();
+          ctx.arc(75, 75, 70, Math.PI, 0, false); // Vẽ nửa đường tròn
+          ctx.lineWidth = 12;
+          ctx.strokeStyle = "#b0b0b0"; // Màu nền tối hơn
+          ctx.stroke();
+      
+          // Tạo gradient từ nhạt đến đậm
+          const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+          gradient.addColorStop(0, colorStart); // Màu bắt đầu nhạt
+          gradient.addColorStop(1, colorEnd); // Màu kết thúc đậm
+      
+          ctx.beginPath();
+          ctx.arc(75, 75, 70, Math.PI, Math.PI + (percentage * Math.PI), false); // Vẽ phần chiếm màu
+          ctx.lineWidth = 12;
+          ctx.strokeStyle = gradient; // Áp dụng gradient
+          ctx.stroke();
+      }
+      
+      // Khi trang được tải
+      document.addEventListener('DOMContentLoaded', function() {
+          fetchSensorData(); // Gọi hàm fetchSensorData lần đầu
+      });
+      
+      
+         
+        // Hàm chung để điều khiển thiết bị và lưu trạng thái vào localStorage
+        function toggleDevice(button, deviceClass,iconClass, onClass, offClass,status) {
+          const icon = document.querySelector(`${deviceClass} i`);
+          const onButton = document.querySelector(`${deviceClass} .on`);
+          const offButton = document.querySelector(`${deviceClass} .off`);
+      
+          if (status==='on') {
+              // Khi bật ON
+             icon.classList.add(iconClass); // Bật biểu tượng 
+              onButton.classList.add('button-on'); // Nút ON màu xanh
+              offButton.classList.remove('button-active-off'); // Bỏ màu đỏ của OFF
+              offButton.classList.add('button-off'); // OFF màu xám
+              onButton.classList.remove('button-off'); // Xóa màu xám của ON
+              onButton.classList.add('disabled'); // Vô hiệu hóa nút ON
+              offButton.classList.remove('disabled'); // Bật lại nút OFF
+              // Lưu trạng thái "ON" vào localStorage
+              localStorage.setItem(deviceClass, JSON.stringify({ status: 'on', iconClass: iconClass }));
+              
+          } else {
+              // Khi bật OFF
+              icon.classList.remove(iconClass); // Tắt biểu tượng
+              offButton.classList.add('button-active-off'); // Nút OFF màu đỏ
+              onButton.classList.remove('button-on'); // Xóa màu xanh của ON
+              onButton.classList.add('button-off'); // ON màu xám
+              offButton.classList.remove('button-off'); // Xóa màu xám của OFF
+              offButton.classList.add('disabled'); // Vô hiệu hóa nút OFF
+              onButton.classList.remove('disabled'); // Bật lại nút ON
+              // Lưu trạng thái "OFF" vào localStorage
+              localStorage.setItem(deviceClass, JSON.stringify({ status: 'off', iconClass: iconClass }));
+          }
+      }
+
+// Hàm để lấy trạng thái thiết bị từ API
+async function fetchDeviceStatus(deviceName) {
+  console.log(`Fetching status for device: ${deviceName}`); // Log the device name being fetched
+
+  try {
+      const response = await fetch(`/api/device_status/${deviceName}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+
+      console.log(`Response received for device: ${deviceName}, Status: ${response.status}`); // Log the response status
+
+      if (response.ok) {
+          const result = await response.json();
+          console.log('Device status retrieved successfully:', result); // Log the successful result
+          return result; // Return device status
+      } else {
+          console.log("Response status:", response.status); // Log the response status when not OK
+          console.error('Failed to fetch device status:', response.statusText); // Log error details
+          return null;
+      }
+  } catch (error) {
+      console.error('Error fetching device status:', error.message); // Log any caught errors
+      return null;
+  }
+}
+
+
+
+// Điều khiển đèn
+
+async function toggleLight(button) {
+  const action = button.classList.contains('on') ? 'ON' : 'OFF';
+
+  // Gửi yêu cầu điều khiển đèn
+  await fetch(`/toggle_device/light/${action}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+
+  // Logic kiểm tra liên tục cho đến khi trạng thái đèn là "ON"
+  let status = await fetchDeviceStatus('light');
+  let retries = 0;
+  const maxRetries = 10;  // Số lần thử tối đa
+  const delay = 1000;  // Thời gian chờ giữa các lần thử (1 giây)
+
+  // Kiểm tra liên tục cho đến khi trạng thái đèn khớp với hành động hoặc vượt quá số lần thử
+  while (status && status.status.toLowerCase() !== action.toLowerCase() && retries < maxRetries) {
+     
+      console.log(`Retrying... Attempt ${retries + 1}`);
+      await new Promise(resolve => setTimeout(resolve, delay));  // Chờ 1 giây trước khi thử lại
+      status = await fetchDeviceStatus('light');  // Kiểm tra lại trạng thái đèn
+      console.log(action.toLowerCase(),status.status.toLowerCase());
+      retries++;  // Tăng bộ đếm lần thử
+  }
+
+  // Khi trạng thái đèn khớp với hành động mong muốn, cập nhật giao diện
+  if (status && status.status.toLowerCase() === action.toLowerCase()) {
+      toggleDevice(button, '.light', 'light-on', 'on', 'off', status.status);
+      console.log(`Light is now ${action}`);
+  } else {
+      console.error(`Failed to update light status after ${maxRetries} attempts.`);
+  }
+}
+
+//Điều khiển quạt 
+async function toggleFan(button) {
+  const action = button.classList.contains('on') ? 'ON' : 'OFF';
+
+  // Gửi yêu cầu điều khiển đèn
+  await fetch(`/toggle_device/fan/${action}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+
+  // Logic kiểm tra liên tục cho đến khi trạng thái đèn là "ON"
+  let status = await fetchDeviceStatus('fan');
+  let retries = 0;
+  const maxRetries = 10;  // Số lần thử tối đa
+  const delay = 1000;  // Thời gian chờ giữa các lần thử (1 giây)
+
+  // Kiểm tra liên tục cho đến khi trạng thái đèn khớp với hành động hoặc vượt quá số lần thử
+  while (status && status.status.toLowerCase() !== action.toLowerCase() && retries < maxRetries) {
+     
+      console.log(`Retrying... Attempt ${retries + 1}`);
+      await new Promise(resolve => setTimeout(resolve, delay));  // Chờ 1 giây trước khi thử lại
+      status = await fetchDeviceStatus('fan');  // Kiểm tra lại trạng thái đèn
+      console.log(action.toLowerCase(),status.status.toLowerCase());
+      retries++;  // Tăng bộ đếm lần thử
+  }
+
+  // Khi trạng thái đèn khớp với hành động mong muốn, cập nhật giao diện
+  if (status && status.status.toLowerCase() === action.toLowerCase()) {
+      toggleDevice(button, '.fan', 'fan-on', 'on', 'off', status.status);
+      console.log(`fan is now ${action}`);
+  } else {
+      console.error(`Failed to update light status after ${maxRetries} attempts.`);
+  }
+}
+
+async function toggleAC(button) {
+  const action = button.classList.contains('on') ? 'ON' : 'OFF';
+
+  // Gửi yêu cầu điều khiển đèn
+  await fetch(`/toggle_device/air_conditioner/${action}`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  });
+
+  // Logic kiểm tra liên tục cho đến khi trạng thái đèn là "ON"
+  let status = await fetchDeviceStatus('conditioner');
+  let retries = 0;
+  const maxRetries = 10;  // Số lần thử tối đa
+  const delay = 1000;  // Thời gian chờ giữa các lần thử (1 giây)
+
+  // Kiểm tra liên tục cho đến khi trạng thái đèn khớp với hành động hoặc vượt quá số lần thử
+  while (status && status.status.toLowerCase() !== action.toLowerCase() && retries < maxRetries) {
+     
+      console.log(`Retrying... Attempt ${retries + 1}`);
+      await new Promise(resolve => setTimeout(resolve, delay));  // Chờ 1 giây trước khi thử lại
+      status = await fetchDeviceStatus('conditioner');  // Kiểm tra lại trạng thái đèn
+      console.log(action.toLowerCase(),status.status.toLowerCase());
+      retries++;  // Tăng bộ đếm lần thử
+  }
+
+  // Khi trạng thái đèn khớp với hành động mong muốn, cập nhật giao diện
+  if (status && status.status.toLowerCase() === action.toLowerCase()) {
+      toggleDevice(button, '.air-conditioner', 'snowflake-on', 'on', 'off', status.status);
+      console.log(`fan is now ${action}`);
+  } else {
+      console.error(`Failed to update light status after ${maxRetries} attempts.`);
+  }
+}
+
+
+
+// Khôi phục trạng thái từ localStorage khi tải lại trang
+window.addEventListener('DOMContentLoaded', (event) => {
+  restoreDeviceState('.light', 'light-on');
+  restoreDeviceState('.fan', 'fan-on');
+  restoreDeviceState('.air-conditioner', 'snowflake-on');
+});
+
+// Hàm khôi phục trạng thái thiết bị từ localStorage
+function restoreDeviceState(deviceClass, defaultIconClass) {
+  const state = localStorage.getItem(deviceClass); // Lấy trạng thái đã lưu từ localStorage
+  const icon = document.querySelector(`${deviceClass} i`);
+  const onButton = document.querySelector(`${deviceClass} .on`);
+  const offButton = document.querySelector(`${deviceClass} .off`);
+
+  if (state) {
+      const { status, iconClass } = JSON.parse(state);
+      if (status === 'on') {
+        icon.classList.add(iconClass); // Bật biểu tượng 
+        onButton.classList.add('button-on'); // Nút ON màu xanh
+        offButton.classList.remove('button-active-off'); // Bỏ màu đỏ của OFF
+        offButton.classList.add('button-off'); // OFF màu xám
+        onButton.classList.remove('button-off'); // Xóa màu xám của ON
+        onButton.classList.add('disabled'); // Vô hiệu hóa nút ON
+        offButton.classList.remove('disabled'); // Bật lại nút OFF
+      } else {
+        icon.classList.remove(iconClass); // Tắt biểu tượng
+        offButton.classList.add('button-active-off'); // Nút OFF màu đỏ
+        onButton.classList.remove('button-on'); // Xóa màu xanh của ON
+        onButton.classList.add('button-off'); // ON màu xám
+        offButton.classList.remove('button-off'); // Xóa màu xám của OFF
+        offButton.classList.add('disabled'); // Vô hiệu hóa nút OFF
+        onButton.classList.remove('disabled'); // Bật lại nút ON
+      }
+  }
+}
+
+
+
+
+
+</script>
+
+  
+  </body>
+</html>

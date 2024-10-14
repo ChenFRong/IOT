@@ -1,0 +1,4 @@
+2024-10-13 02:08:52,262 - INFO - Exiting...
+2024-10-13 02:18:24,884 - INFO - Subscribed to topic: trannhung/esp8266/light/status
+2024-10-13 02:18:24,884 - INFO - Subscribed to topic: trannhung/esp8266/fan/status
+2024-10-13 02:18:24,884 - INFO - Subscribed to topic: trannhung/esp8266/conditioner/status

@@ -144,7 +144,7 @@
             // Khởi tạo DataTable
             var table = $('#data-table').DataTable({
                 paging: true,                  // Enable pagination
-                ordering: true,                // Enable sorting
+                order: [[0, "desc"]] ,// Sắp xếp theo cột đầu tiên (id) giảm dần                // Enable sorting
                 info: true,                    // Show table information
                 searching: false,              // Disable default search
                 lengthMenu: [10, 20, 50, 100], // Page size options
@@ -173,6 +173,8 @@
                     queries: searchValue
                 }).toString();
                 
+               
+
                 // Gọi API và cập nhật bảng
                 fetch('/search_actionhistory?' + searchParams)
                     .then(response => response.json())
@@ -183,13 +185,14 @@
                             alert('Không tìm thấy kết quả nào!');
                         } else {
                         // Thêm dữ liệu mới vào DataTable
+                        
                         data.forEach(entry => {
                             table.row.add([
                                 entry.id,
                                 entry.devices,
                                 entry.action,
                                 entry.time
-                            ]).draw(); // Vẽ lại bảng sau khi thêm hàng mới
+                            ]).draw(); // Vẽ lại bảng sau khi thêm hàng mới    
                         });}
                     })
                     .catch(error => console.error('Error:', error));

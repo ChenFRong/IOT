@@ -467,7 +467,7 @@
                       // Vẽ nửa đường tròn với gradient sáng và nổi bật hơn
                       drawHalfCircle(ctxTemperature, Math.min(1, data.temperature / 100),"#ff9999", "#ff3333"); // Nhiệt độ: Đỏ gradient
                       drawHalfCircle(ctxHumidity, Math.min(1, data.humidity / 100), "#3FD5E9", "#1446F7"); // Độ ẩm: Xanh gradient
-                      drawHalfCircle(ctxLight, Math.min(1, (data.light - 300) / (2500 - 300)), "#F2CD5C", "#F27405"); // Ánh sáng: Vàng/Da cam gradient
+                      drawHalfCircle(ctxLight, Math.min(1, (data.light - 0) / (3500 - 0)), "#F2CD5C", "#F27405"); // Ánh sáng: Vàng/Da cam gradient
                   }
               },
               error: function(xhr, status, error) {

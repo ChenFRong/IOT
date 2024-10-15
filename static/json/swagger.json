@@ -179,21 +179,21 @@
         },
         "/toggle_device/{device}/{action}": {
             "post": {
-                "summary": "Control a device via MQTT",
-                "description": "This endpoint allows you to turn on or off a specific device using MQTT.",
+                "summary": "Điểu khiển thiết bị qua MQTT",
+                "description": "Điều khiển bật tắt các thiết bị qua MQTT",
                 "parameters": [
                 {
                     "name": "device",
                     "in": "path",
                     "required": true,
-                    "description": "The name of the device to control (light, fan, air_conditioner).",
+                    "description": " các thiết bị (light, fan, air_conditioner).",
                     "type": "string"
                 },
                 {
                     "name": "action",
                     "in": "path",
                     "required": true,
-                    "description": "The action to perform on the device (on or off).",
+                    "description": "Hành động điều khiển  (on or off).",
                     "type": "string"
                 }
                 ],
@@ -254,55 +254,56 @@
             }
          },
         "/api/device_status/{device_name}": {
-            "get": {
-                "summary": "Get the status of a device",
-                "parameters": [
-                {
-                    "name": "device_name",
-                    "in": "path",
-                    "required": true,
-                    "description": "The name of the device to check its status.",
-                    "type": "string"
-                }
-                ],
-                "responses": {
-                "200": {
-                    "description": "Successful response with device status.",
-                    "schema": {
-                    "type": "object",
-                    "properties": {
-                        "device": {
+                "get": {
+                    "summary": "Lấy trạng thái các thiết bị",
+                    "parameters": [
+                    {
+                        "name": "device_name",
+                        "in": "path",
+                        "required": true,
+                        "description": " các thiết bị (light, fan, air_conditioner).",
                         "type": "string"
-                        },
-                        "status": {
-                        "type": "string"
-                        },
-                        "last_update": {
-                        "type": "string",
-                        "format": "date-time"
-                        }
                     }
-                    }
-                },
-                "404": {
-                    "description": "Device not found.",
-                    "schema": {
+                    ],
+                    "responses": {
+                    "200": {
+                        "description": "Successful response with device status.",
+                        "schema": {
                         "type": "object",
                         "properties": {
-                            "status": {
-                            "type": "string",
-                            "example": "error"
+                            "device": {
+                            "type": "string"
                             },
-                            "message": {
+                            "status": {
+                            "type": "string"
+                            },
+                            "last_update": {
                             "type": "string",
-                            "example": "Device not found"
+                            "format": "date-time"
+                            }
+                        }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                "type": "string",
+                                "example": "error"
+                                },
+                                "message": {
+                                "type": "string",
+                                "example": "Device not found"
+                                }
                             }
                         }
                     }
+                    
                 }
-                
-            }
-        },
+             }
+         },
         "/actionhistory": {
             "get": {
                 "summary": "Hiển thị lịch sử hành động",
@@ -358,4 +359,4 @@
         }
     }
 }
-}
+
